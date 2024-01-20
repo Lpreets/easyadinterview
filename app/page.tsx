@@ -4,7 +4,7 @@ import Form from "./_components/form/Form";
 
 export default function Home() {
   return (
-    <main className="bg-slate-50">
+    <main className="bg-white">
       <header className="flex space-y-2 mx-2 justify-between">
         <Image src="/logo.png" alt="logo" width={150} height={150} />
         <div className="space-x-4">
