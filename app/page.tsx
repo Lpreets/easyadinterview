@@ -1,6 +1,9 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Form from "./_components/form/Form";
+import Carousel from "./_components/Carousel";
+import Footer from "./_components/Footer";
+import { ArrowDown } from "lucide-react";
 
 export default function Home() {
   return (
@@ -20,6 +23,17 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <div className="lg:block hidden">
+      <h1 className="text-center text-xl font-bold mb-8">Brands that use our service</h1>
+      <div className="flex">
+        <div className="flex-1" />
+        <Carousel />
+        <div className="flex-1" />
+      </div>
+      </div>
+      <footer className="hidden lg:block">
+        <Footer />
+      </footer>
     </main>
   );
 }

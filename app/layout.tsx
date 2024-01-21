@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="max-w-6xl mx-auto bg-slate-200">
+      <body className="max-w-6xl mx-auto lg:bg-slate-200">
         {children}
       </body>
     </html>

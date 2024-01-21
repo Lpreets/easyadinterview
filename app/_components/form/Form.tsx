@@ -62,9 +62,9 @@ export default function FormModel() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-2 w-[272px]"
       >
-        <h1 className="text-center text-xl text-[#DF0000] font-bold mb-4">
+        <h2 className="text-center text-xl text-[#DF0000] font-bold mb-4">
           Welcome
-        </h1>
+        </h2>
         <div className="flex justify-evenly">
         <Button 
             type="button"
