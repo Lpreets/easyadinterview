@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import Form from "./_components/form/Form";
 import Carousel from "./_components/Carousel";
 import Footer from "./_components/Footer";
-import { ArrowDown } from "lucide-react";
 
 export default function Home() {
   return (
