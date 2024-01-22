@@ -41,17 +41,17 @@ export default function FormModel() {
   
   const router = useRouter();
   const [showResetMessage, setShowResetMessage] = useState(false);
-  const [activeButton, setActiveButton] = useState<string>('login');
+  const [activeButton, setActiveButton] = useState<string>("login");
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     setShowResetMessage(false);
-    router.push('/dashboard');
+    router.push("/dashboard");
   };
 
   useEffect(() => {
     if (form.formState.isSubmitSuccessful) {
       setShowResetMessage(false);
-    } else if (form.formState.submitCount > 0 && activeButton === 'login') {
+    } else if (form.formState.submitCount > 0 && activeButton === "login") {
       setShowResetMessage(true);
     }
   }, [form.formState, activeButton]);

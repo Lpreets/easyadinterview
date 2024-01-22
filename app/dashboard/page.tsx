@@ -315,10 +315,10 @@ const Dashboard = () => {
             <div className="mt-8 flex1 flex-col">
               <h3 className="text-center mb-2 font-bold">Notion</h3>
               <Image
-                src="/notion.png"
+                src="/code.png"
                 alt="notion"
-                width={600}
-                height={600}
+                width={800}
+                height={800}
                 className="rounded-lg"
               />
             </div>
@@ -451,12 +451,12 @@ const Dashboard = () => {
           <h3 className="text-center font-bold mt-4" id="steg8">Metrix</h3>
           <div className="flex border-t-2">
             <div className="mt-8 flex1 flex-col">
-              <h3 className="text-center mb-2 font-bold">Notion</h3>
+              <h3 className="text-center mb-2 font-bold">GTmetrix</h3>
               <Image
-                src="/notion.png"
+                src="/gtmetrix.png"
                 alt="notion"
-                width={600}
-                height={600}
+                width={1000}
+                height={500}
                 className="rounded-lg"
               />
             </div>
