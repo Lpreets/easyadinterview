@@ -23,7 +23,7 @@ const Images = [amazon, meta, netflix, linkedin, microsoft]
 <Carousel
        plugins={[
         Autoplay({
-          delay: 2000,
+          delay: 3000,
         }),
       ]}
       className="max-w-xs"

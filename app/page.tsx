@@ -22,7 +22,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <div className="md:block hidden">
+      <div className="md:block hidden lg:mt-0 mt-10">
       <h1 className="text-center text-xl font-bold mb-8">Brands that use our service</h1>
       <div className="flex">
         <div className="flex-1" />

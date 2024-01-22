@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Playfair_Display } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const openSans = Playfair_Display({subsets: ['latin']})
 
 export const metadata: Metadata = {
   title: "trydo",
@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="max-w-6xl mx-auto lg:bg-slate-200">
+        <body style={{ fontFamily: `${openSans}` }} className="max-w-6xl mx-auto lg:bg-slate-200">
         {children}
       </body>
     </html>

@@ -102,7 +102,7 @@ export default function FormModel() {
             Sign up
           </Button>
         </div>
-        <div className="space-y-4">
+        <div className="space-y-4 text-center">
         {activeButton === 'login' ? (
             <p>Log in using any of these providers</p>
           ) : (
