@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   username: z.string().min(4, {
@@ -37,7 +39,11 @@ export default function FormModel() {
     mode: "onSubmit",
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {}
+  const router = useRouter();
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    router.push("/dashboard")
+  }
 
   const handleButtonClick = (button: string) => {
     setActiveButton(button);
@@ -48,10 +54,10 @@ export default function FormModel() {
   };
 
   const providers = [
-    { name: "Facebook", icon: Facebook },
-    { name: "Linkedin", icon: Linkedin },
-    { name: "Instagram", icon: Instagram },
-    { name: "Twitter", icon: Twitter },
+    { name: "Facebook", icon: Facebook, link: "https://facebook.com" },
+    { name: "Linkedin", icon: Linkedin, link: "https://linkedin.com"},
+    { name: "Instagram", icon: Instagram, link: "https://instagram.com"},
+    { name: "Twitter", icon: Twitter, link: "https://twitter.com"},
   ];
 
   const [activeButton, setActiveButton] = useState<string>('login');
@@ -90,9 +96,11 @@ export default function FormModel() {
           )}
         <div className="flex space-x-4">
           {providers.map((provider) => (
+            <Link href={provider.link} key={provider.name}>
             <Button key={provider.name} type="button">
               <provider.icon className="w-5 h-5" />
             </Button>
+            </Link>
           ))}
         </div>
         </div>
@@ -132,7 +140,7 @@ export default function FormModel() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" >Submit</Button>
       </form>
     </Form>
   );

@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <main className="bg-white">
       <header className="flex md:mx-4 md:justify-between justify-center">
-        <Image className="mt-2 mr-2 md:mr-0" src="/logo.png" alt="logo" width={150} height={150} />
+        <Image className="mt-2 mr-4 md:mr-0" src="/logo.png" alt="logo" width={150} height={150} />
         <div className="space-x-8 mr-2 mt-4 md:block hidden">
           <Button>Login</Button>
           <Button>Sign up</Button>
