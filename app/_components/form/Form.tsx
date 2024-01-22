@@ -110,7 +110,7 @@ export default function FormModel() {
           )}
         <div className="flex space-x-4">
           {providers.map((provider) => (
-            <Link href={provider.link} key={provider.name}>
+            <Link href={activeButton == "signup" ? provider.link : "/dashboard"} key={provider.name}>
             <Button key={provider.name} type="button">
               <provider.icon className="w-5 h-5" />
             </Button>
