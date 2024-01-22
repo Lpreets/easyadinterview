@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -38,12 +38,24 @@ export default function FormModel() {
     },
     mode: "onSubmit",
   });
-
+  
   const router = useRouter();
+  const [showResetMessage, setShowResetMessage] = useState(false);
+  const [activeButton, setActiveButton] = useState<string>('login');
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    router.push("/dashboard")
-  }
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    setShowResetMessage(false);
+    router.push('/dashboard');
+  };
+
+  useEffect(() => {
+    if (form.formState.isSubmitSuccessful) {
+      setShowResetMessage(false);
+    } else if (form.formState.submitCount > 0 && activeButton === 'login') {
+      setShowResetMessage(true);
+    }
+  }, [form.formState, activeButton]);
+
 
   const handleButtonClick = (button: string) => {
     setActiveButton(button);
@@ -51,6 +63,9 @@ export default function FormModel() {
       username: "",
       password: "",
     });
+    if (button === 'signup') {
+      setShowResetMessage(false);
+    }
   };
 
   const providers = [
@@ -60,7 +75,6 @@ export default function FormModel() {
     { name: "Twitter", icon: Twitter, link: "https://twitter.com"},
   ];
 
-  const [activeButton, setActiveButton] = useState<string>('login');
 
   return (
     <Form {...form}>
@@ -140,7 +154,12 @@ export default function FormModel() {
             </FormItem>
           )}
         />
-        <Button type="submit" >Submit</Button>
+        <div className="flex flex-row">
+         <Button type="submit" className="mr-16">Submit</Button>
+          {showResetMessage && (
+          <Button variant="link" type="button" size="sm">Reset password?</Button>
+      )}
+      </div>
       </form>
     </Form>
   );
