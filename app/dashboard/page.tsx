@@ -220,7 +220,16 @@ const Dashboard = () => {
           <div className="flex justify-center border-t-2">
             <div className="mt-8">
               <Image
-                src="/notion.png"
+                src="/acces1.png"
+                alt="notion"
+                width={1000}
+                height={600}
+                className="rounded-lg"
+              />
+            </div>
+            <div className="mt-8">
+              <Image
+                src="/acees2.png"
                 alt="notion"
                 width={1000}
                 height={600}
