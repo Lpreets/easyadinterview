@@ -250,6 +250,56 @@ const Dashboard = () => {
             </div>
           </div>
         </article>
+        <article>
+        <h3 className="text-center font-bold mt-4" id="steg8">Del 2</h3>
+        <div className="border-t-2 pt-4 ">
+        Dersom oppgaven hadde vært at du skulle lage en fungerende innloggingsportal til en tjeneste, hvilke oppgaver ville du gjort selv, og hvilke ville du eventuelt ha delegert videre? Vi ønsker en begrunnelse av valgene du hadde tatt.
+        <div className="flex">
+        <div className="flex-1 mx-8 mt-14 border-r-2 pr-16">
+              <p className="text-center">
+                <u>Front-End</u>
+              </p>
+              <br />
+              <div className="border-4 border-double">
+                <ol className="ml-6 list-disc ">
+                  <li>Design av Brukergrensesnitt (UI)</li>
+                  - UX Designer
+                  <li>Responsiv Design</li>
+                  - Front-End Utvikler
+                  <li>Klient Side Validering</li>
+                  - Front-End Utvikler
+                  <li>Accessibility</li>
+                  - Front-End Utvikler
+                </ol>
+              </div>
+              <br />
+              <p>
+              </p>
+            </div>
+            <div className="flex-1 mx-8 mt-14">
+              <p className="text-center">
+                <u>Back-End</u>
+              </p>
+              <br />
+              <div className="border-4 border-double">
+                <ol className="ml-6 list-disc ">
+                  <li>API-utvikling</li>
+                  - Back-End Utvikler
+                  <li>Database bruker intergrasjon</li>
+                  - Back-End Utvikler
+                  <li>Tredjeparts Autentiseringstjenester</li>
+                  - Back-End Utvikler / Sikkerhet spesialist
+                  <li>Implementering av Sikkerhetstiltak</li>
+                  - Back-End Utvikler / Sikkerhet spesialist
+                  <li>Spesifikk back-end testing</li>
+                  - Back-End Utvikler
+                </ol>
+              </div>
+              <br />
+              </div>
+            </div>
+          </div>
+        </article>
       </main>
       <div className="flex justify-center py-8">
       <Button onClick={scrollToTop}><ArrowUp /></Button>
