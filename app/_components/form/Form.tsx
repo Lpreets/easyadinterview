@@ -69,10 +69,10 @@ export default function FormModel() {
   };
 
   const providers = [
-    { name: "Facebook", icon: Facebook, link: "https://facebook.com" },
-    { name: "Linkedin", icon: Linkedin, link: "https://linkedin.com"},
-    { name: "Instagram", icon: Instagram, link: "https://instagram.com"},
-    { name: "Twitter", icon: Twitter, link: "https://twitter.com"},
+    { name: "Facebook", icon: Facebook, link: "https://facebook.com", aria: "facebook" },
+    { name: "Linkedin", icon: Linkedin, link: "https://linkedin.com", aria: "linkedin"},
+    { name: "Instagram", icon: Instagram, link: "https://instagram.com", aria: "instagram"},
+    { name: "Twitter", icon: Twitter, link: "https://twitter.com", aria: "twitter"},
   ];
 
 
@@ -87,6 +87,7 @@ export default function FormModel() {
         </h2>
         <div className="flex justify-evenly">
         <Button 
+        aria-label="Login button"
             type="button"
             variant={activeButton === 'login' ? 'default' : 'ghost'}
             onClick={() => handleButtonClick('login')}
@@ -95,6 +96,7 @@ export default function FormModel() {
             Login
           </Button>
           <Button 
+          aria-label="Sign up button"
             type="button"
             variant={activeButton === 'signup' ? 'default' : 'ghost'}
             onClick={() => handleButtonClick('signup')}
@@ -111,7 +113,7 @@ export default function FormModel() {
         <div className="flex space-x-4">
           {providers.map((provider) => (
             <Link href={activeButton == "signup" ? provider.link : "/dashboard"} key={provider.name}>
-            <Button key={provider.name} type="button">
+            <Button key={provider.name} type="button" aria-label={provider.aria}>
               <provider.icon className="w-5 h-5" />
             </Button>
             </Link>
@@ -155,9 +157,9 @@ export default function FormModel() {
           )}
         />
         <div className="flex flex-row">
-         <Button type="submit" className="mr-16">Submit</Button>
+         <Button type="submit" className="mr-16" aria-label="Submit form button">Submit</Button>
           {showResetMessage && (
-          <Button variant="link" type="button" size="sm">Reset password?</Button>
+          <Button variant="link" type="button" size="sm" aria-label="Reset password button" >Reset password?</Button>
       )}
       </div>
       </form>

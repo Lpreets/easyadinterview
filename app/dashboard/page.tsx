@@ -241,9 +241,6 @@ const Dashboard = () => {
             </div>
           </div>
         </article>
-        <article className="mt-8 border-b-2 ">
-          <h2 className="text-center font-bold text-xl">FAQ</h2>
-        </article>
       </main>
       <div className="flex justify-center py-8">
       <Button onClick={scrollToTop}><ArrowUp /></Button>
