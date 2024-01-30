@@ -24,6 +24,9 @@ const formSchema = z.object({
   username: z.string().min(4, {
     message: "Username must be at least 4 characters.",
   }),
+  email: z.string().email({
+    message: "Email must be a proper email address.",
+  }),
   password: z.string().min(6, {
     message: "Password must be at least 6 characters.",
   }),
@@ -47,12 +50,13 @@ export default function FormModel() {
     setShowResetMessage(false);
     
     if (activeButton === "signup") {
-      const response = await fetch('/api/signup', {
+      const response = await fetch('http://localhost:8000/api/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(values),
+        credentials: 'include',
       });
   
       if (response.ok) {
@@ -63,7 +67,7 @@ export default function FormModel() {
     }
 
     if (activeButton === "login") {
-      const response = await fetch('/api/login', {
+      const response = await fetch('http://localhost:8000/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -174,6 +178,21 @@ export default function FormModel() {
             </FormItem>
           )}
         />
+        {activeButton === 'signup' && (
+          <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="email..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        )}
         <FormField
           control={form.control}
           name="password"
