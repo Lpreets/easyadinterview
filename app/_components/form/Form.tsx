@@ -43,9 +43,40 @@ export default function FormModel() {
   const [showResetMessage, setShowResetMessage] = useState(false);
   const [activeButton, setActiveButton] = useState<string>("login");
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setShowResetMessage(false);
-    router.push("/dashboard");
+    
+    if (activeButton === "signup") {
+      const response = await fetch('/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
+  
+      if (response.ok) {
+        setActiveButton("login");
+      } else {
+         console.log(Error)
+      }
+    }
+
+    if (activeButton === "login") {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
+      
+      if (response.ok) {
+        router.push("/dashboard");
+      } else {
+         console.log(Error)
+      }
+    }
   };
 
   useEffect(() => {
