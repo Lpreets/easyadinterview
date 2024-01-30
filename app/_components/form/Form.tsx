@@ -21,9 +21,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  username: z.string().min(4, {
-    message: "Username must be at least 4 characters.",
-  }),
   email: z.string().email({
     message: "Email must be a proper email address.",
   }),
@@ -36,7 +33,6 @@ export default function FormModel() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
       password: "",
       email: "",
     },
@@ -100,7 +96,6 @@ export default function FormModel() {
   const handleButtonClick = (button: string) => {
     setActiveButton(button);
     form.reset({
-      username: "",
       password: "",
       email: "",
     });
@@ -166,25 +161,11 @@ export default function FormModel() {
           <b>Or</b>
         </p>
           {activeButton === 'login' ? (
-            <p>Log in with your username</p>
+            <p>Log in with your email</p>
           ) : (
-            <p>Sign up with your username</p>
+            <p>Sign up with your email</p>
           )}
           </div>
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="username..." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {activeButton === 'signup' && (
           <FormField
           control={form.control}
           name="email"
@@ -198,7 +179,6 @@ export default function FormModel() {
             </FormItem>
           )}
         />
-        )}
         <FormField
           control={form.control}
           name="password"
