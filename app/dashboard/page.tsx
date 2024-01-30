@@ -69,6 +69,9 @@ const Dashboard = () => {
     <div className="border mt-2" />
       <main className="mt-4 mx-4">
         <section>
+          <div className="flex justify-center my-2">
+          <Button>Logout</Button>
+          </div>
           <h1 className="text-center text-4xl">
             Min tankegang og fremgang av case
           </h1>

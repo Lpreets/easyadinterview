@@ -50,25 +50,6 @@ export default function FormModel() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setShowResetMessage(false);
     
-    if (activeButton === "signup") {
-      const response = await fetch('http://localhost:8000/api/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-        credentials: 'include',
-      });
-
-      console.log(response)
-  
-      if (response.ok) {
-        setActiveButton("login");
-      } else {
-         console.log(Error)
-      }
-    }
-
     if (activeButton === "login") {
       const response = await fetch('http://localhost:8000/api/login', {
         method: 'POST',
@@ -76,13 +57,33 @@ export default function FormModel() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(values),
-        credentials: 'include',
+        // credentials: 'include',
       });
       
       if (response.ok) {
         router.push("/dashboard");
       } else {
-         console.log(Error)
+        const error = await response.text();
+        console.log(error);
+      }
+    
+    } else if (activeButton === "signup") {
+      const response = await fetch('http://localhost:8000/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+        //credentials: 'include',
+      });
+  
+      console.log(response)
+  
+      if (response.ok) {
+        setActiveButton("login");
+      } else {
+        const error = await response.text();
+        console.log(error);
       }
     }
   };
@@ -221,3 +222,4 @@ export default function FormModel() {
     </Form>
   );
 }
+
