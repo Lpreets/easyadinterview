@@ -38,6 +38,7 @@ export default function FormModel() {
     defaultValues: {
       username: "",
       password: "",
+      email: "",
     },
     mode: "onSubmit",
   });
@@ -58,6 +59,8 @@ export default function FormModel() {
         body: JSON.stringify(values),
         credentials: 'include',
       });
+
+      console.log(response)
   
       if (response.ok) {
         setActiveButton("login");
@@ -73,6 +76,7 @@ export default function FormModel() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(values),
+        credentials: 'include',
       });
       
       if (response.ok) {
@@ -97,6 +101,7 @@ export default function FormModel() {
     form.reset({
       username: "",
       password: "",
+      email: "",
     });
     if (button === 'signup') {
       setShowResetMessage(false);
