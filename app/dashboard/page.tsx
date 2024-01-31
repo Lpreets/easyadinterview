@@ -1,9 +1,9 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/auth";
 import { ArrowUp } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
 
 const navlinks = [
@@ -43,6 +43,8 @@ const navlinks = [
 
 const Dashboard = () => {
 
+  const { logout } = useAuth()
+
   const handleClick = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -70,7 +72,7 @@ const Dashboard = () => {
       <main className="mt-4 mx-4">
         <section>
           <div className="flex justify-center my-2">
-          <Button>Logout</Button>
+          <Button onClick={logout}>Logout</Button>
           </div>
           <h1 className="text-center text-4xl">
             Min tankegang og fremgang av case

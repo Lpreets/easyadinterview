@@ -22,13 +22,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 
 import { Input } from "@/components/ui/input";
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAuth } from '@/hooks/auth'
+import { useAuth } from "@/hooks/auth";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -50,51 +50,49 @@ export default function FormModel() {
     defaultValues: {
       name: "",
       password: "",
+      passwordConfirmation: "",
       email: "",
     },
     mode: "onSubmit",
   });
-  
+
   const router = useRouter();
 
   const [showResetMessage, setShowResetMessage] = useState(false);
   const [activeButton, setActiveButton] = useState<string>("login");
-  const [errors, setErrors] = useState([])
-  const [shouldRemember, setShouldRemember] = useState(false)
-  const [status, setStatus] = useState(null)
+  const [errors, setErrors] = useState([]);
+  const [shouldRemember, setShouldRemember] = useState(false);
+  const [status, setStatus] = useState(null);
 
   const { login } = useAuth({
-    middleware: 'guest',
-    redirectIfAuthenticated: '/dashboard',
-})
+    middleware: "guest",
+    redirectIfAuthenticated: "/dashboard",
+  });
 
-const { register } = useAuth({
-  middleware: 'guest',
-  redirectIfAuthenticated: '/dashboard',
-})
+  const { register } = useAuth({
+    middleware: "guest",
+    redirectIfAuthenticated: "/dashboard",
+  });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setShowResetMessage(false);
-    
-    if (activeButton === "login") {
-       login({
-            email: values.email,
-            password: values.password,
-            remember: shouldRemember,
-            setErrors,
-            setStatus,
-        })
-    
-    } else if (activeButton === "signup") {
 
+    if (activeButton === "login") {
+      login({
+        email: values.email,
+        password: values.password,
+        remember: shouldRemember,
+        setErrors,
+        setStatus,
+      });
+    } else if (activeButton === "signup") {
       register({
         name: values.name,
         email: values.email,
         password: values.password,
         password_confirmation: values.passwordConfirmation,
         setErrors,
-    })
-      
+      });
     }
   };
 
@@ -106,25 +104,46 @@ const { register } = useAuth({
     }
   }, [form.formState, activeButton]);
 
-
   const handleButtonClick = (button: string) => {
     setActiveButton(button);
     form.reset({
+      name: "",
       password: "",
+      passwordConfirmation: "",
       email: "",
     });
-    if (button === 'signup') {
+
+    if (button === "signup") {
       setShowResetMessage(false);
     }
   };
 
   const providers = [
-    { name: "Facebook", icon: Facebook, link: "https://facebook.com", aria: "facebook" },
-    { name: "Linkedin", icon: Linkedin, link: "https://linkedin.com", aria: "linkedin"},
-    { name: "Instagram", icon: Instagram, link: "https://instagram.com", aria: "instagram"},
-    { name: "Twitter", icon: Twitter, link: "https://twitter.com", aria: "twitter"},
+    {
+      name: "Facebook",
+      icon: Facebook,
+      link: "https://facebook.com",
+      aria: "facebook",
+    },
+    {
+      name: "Linkedin",
+      icon: Linkedin,
+      link: "https://linkedin.com",
+      aria: "linkedin",
+    },
+    {
+      name: "Instagram",
+      icon: Instagram,
+      link: "https://instagram.com",
+      aria: "instagram",
+    },
+    {
+      name: "Twitter",
+      icon: Twitter,
+      link: "https://twitter.com",
+      aria: "twitter",
+    },
   ];
-
 
   return (
     <Form {...form}>
@@ -136,66 +155,72 @@ const { register } = useAuth({
           Welcome
         </h2>
         <div className="flex justify-evenly">
-        <Button 
-        aria-label="Login button"
+          <Button
+            aria-label="Login button"
             type="button"
-            variant={activeButton === 'login' ? 'default' : 'ghost'}
-            onClick={() => handleButtonClick('login')}
-            
+            variant={activeButton === "login" ? "default" : "ghost"}
+            onClick={() => handleButtonClick("login")}
           >
             Login
           </Button>
-          <Button 
-          aria-label="Sign up button"
+          <Button
+            aria-label="Sign up button"
             type="button"
-            variant={activeButton === 'signup' ? 'default' : 'ghost'}
-            onClick={() => handleButtonClick('signup')}
+            variant={activeButton === "signup" ? "default" : "ghost"}
+            onClick={() => handleButtonClick("signup")}
           >
             Sign up
           </Button>
         </div>
         <div className="space-y-4 text-center">
-        {activeButton === 'login' ? (
+          {activeButton === "login" ? (
             <p>Log in using any of these providers</p>
           ) : (
             <p>Sign up using any of these providers</p>
           )}
-        <div className="flex space-x-4">
-          {providers.map((provider) => (
-            <Link href={activeButton == "signup" ? provider.link : "/dashboard"} key={provider.name}>
-            <Button key={provider.name} type="button" aria-label={provider.aria}>
-              <provider.icon className="w-5 h-5" />
-            </Button>
-            </Link>
-          ))}
-        </div>
+          <div className="flex space-x-4">
+            {providers.map((provider) => (
+              <Link
+                href={activeButton == "signup" ? provider.link : "/dashboard"}
+                key={provider.name}
+              >
+                <Button
+                  key={provider.name}
+                  type="button"
+                  aria-label={provider.aria}
+                >
+                  <provider.icon className="w-5 h-5" />
+                </Button>
+              </Link>
+            ))}
+          </div>
         </div>
         <div className="text-center space-y-2">
-        <p>
-          <b>Or</b>
-        </p>
-          {activeButton === 'login' ? (
+          <p>
+            <b>Or</b>
+          </p>
+          {activeButton === "login" ? (
             <p>Log in with your email</p>
           ) : (
             <p>Sign up with your email</p>
           )}
-          </div>
-          {activeButton === 'signup' && (
+        </div>
+        {activeButton === "signup" && (
           <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="name..." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-          )}
-          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="name..." {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+        <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
@@ -221,57 +246,71 @@ const { register } = useAuth({
             </FormItem>
           )}
         />
-        {activeButton === 'signup' && (
+        {activeButton === "signup" && (
           <FormField
-          control={form.control}
-          name="passwordConfirmation"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="confirm..." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-          )}
-          {activeButton === 'login' && (
-<FormField
-  control={form.control}
-  name="remember"
-  render={({ field }) => (
-    <FormItem>
-      <FormControl>
-        <label className="flex items-center">
-          <input
-            type="checkbox"
-            className="form-checkbox"
-            checked={field.value}
-            onChange={field.onChange}
+            control={form.control}
+            name="passwordConfirmation"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm Password</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="confirm..." {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          <span className="ml-2">Remember me</span>
-        </label>
-      </FormControl>
-      <FormMessage />
-    </FormItem>
-  )}
-/>
-          )}
+        )}
+        {activeButton === "login" && (
+          <FormField
+            control={form.control}
+            name="remember"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <label className="flex items-center">
+                    <input
+                      type="checkbox"
+                      className="form-checkbox"
+                      checked={field.value ?? false}
+                      onChange={field.onChange}
+                    />
+                    <span className="ml-2">Remember me</span>
+                  </label>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <div className="flex flex-row">
-         <Button type="submit" className="mr-16" aria-label="Submit form button">Submit</Button>
+          <Button
+            type="submit"
+            className="mr-16"
+            aria-label="Submit form button"
+          >
+            Submit
+          </Button>
           {showResetMessage && (
-             <Dialog>
-             <DialogTrigger asChild>
-              <Button variant="link" type="button" size="sm" aria-label="Reset password button">Reset password?</Button>
-             </DialogTrigger>
-             <DialogContent className="sm:max-w-[425px]">
-               <DialogHeader>
-                 <DialogTitle>Reset your password</DialogTitle>
-                 <DialogDescription>
-                   Type in your email and we will send you a link to reset your password.
-                 </DialogDescription>
-               </DialogHeader>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  variant="link"
+                  type="button"
+                  size="sm"
+                  aria-label="Reset password button"
+                >
+                  Reset password?
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Reset your password</DialogTitle>
+                  <DialogDescription>
+                    Type in your email and we will send you a link to reset your
+                    password.
+                  </DialogDescription>
+                </DialogHeader>
                 <form>
                   <div className="space-y-4">
                     <FormField
@@ -287,17 +326,16 @@ const { register } = useAuth({
                         </FormItem>
                       )}
                     />
-                    <Button type="submit" aria-label="Submit form button">Submit</Button>
+                    <Button type="submit" aria-label="Submit form button">
+                      Submit
+                    </Button>
                   </div>
-                  </form>
-             </DialogContent>
-           </Dialog>
-         
-      )}
-      </div>
+                </form>
+              </DialogContent>
+            </Dialog>
+          )}
+        </div>
       </form>
     </Form>
-
   );
 }
-
