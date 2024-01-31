@@ -88,11 +88,11 @@ const { register } = useAuth({
     } else if (activeButton === "signup") {
 
       register({
+        name: values.name,
         email: values.email,
         password: values.password,
-        remember: shouldRemember,
+        password_confirmation: values.passwordConfirmation,
         setErrors,
-        setStatus,
     })
       
     }
