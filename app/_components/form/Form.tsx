@@ -15,14 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 import { Input } from "@/components/ui/input";
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
@@ -30,7 +22,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/auth";
 
-const formSchema = z.object({
+const formSchemaSignup = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({
     message: "Email must be a proper email address.",
@@ -41,68 +33,92 @@ const formSchema = z.object({
   passwordConfirmation: z.string().min(6, {
     message: "Password must be at least 6 characters.",
   }),
+});
+
+const formSchemaLogin = z.object({
+  email: z.string().email({
+    message: "Email must be a proper email address.",
+  }),
+  password: z.string().min(6, {
+    message: "Password must be at least 6 characters.",
+  }),
   remember: z.boolean().optional(),
 });
 
-export default function FormModel() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      password: "",
-      passwordConfirmation: "",
-      email: "",
-    },
-    mode: "onSubmit",
-  });
+const formSchemaForgotPassword = z.object({
+  email: z.string().email({
+    message: "Email must be a proper email address.",
+  }),
+});
 
+export default function FormModel() {
   const router = useRouter();
 
-  const [showResetMessage, setShowResetMessage] = useState(false);
   const [activeButton, setActiveButton] = useState<string>("login");
   const [errors, setErrors] = useState([]);
   const [shouldRemember, setShouldRemember] = useState(false);
   const [status, setStatus] = useState(null);
 
-  const { login } = useAuth({
+  const { login, register, forgotPassword } = useAuth({
     middleware: "guest",
     redirectIfAuthenticated: "/dashboard",
   });
 
-  const { register } = useAuth({
-    middleware: "guest",
-    redirectIfAuthenticated: "/dashboard",
-  });
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setShowResetMessage(false);
-
-    if (activeButton === "login") {
-      login({
-        email: values.email,
-        password: values.password,
-        remember: shouldRemember,
-        setErrors,
-        setStatus,
-      });
-    } else if (activeButton === "signup") {
-      register({
-        name: values.name,
-        email: values.email,
-        password: values.password,
-        password_confirmation: values.passwordConfirmation,
-        setErrors,
-      });
-    }
+  type FormData = {
+    name?: string;
+    email: string;
+    password?: string;
+    passwordConfirmation?: string;
+    remember?: boolean;
   };
 
-  useEffect(() => {
-    if (form.formState.isSubmitSuccessful) {
-      setShowResetMessage(false);
-    } else if (form.formState.submitCount > 0 && activeButton === "login") {
-      setShowResetMessage(true);
-    }
-  }, [form.formState, activeButton]);
+  const form = useForm<FormData>({
+    resolver: zodResolver(
+      activeButton === "login"
+        ? formSchemaLogin
+        : activeButton === "signup"
+        ? formSchemaSignup
+        : formSchemaForgotPassword
+    ),
+    defaultValues: {
+      email: "",
+      ...(activeButton === "signup" && {
+        name: "",
+        password: "",
+        passwordConfirmation: "",
+      }),
+      remember: activeButton === "login" ? false : undefined,
+    },
+    mode: "onSubmit",
+  });
+
+  const onSubmitLogin = async (values: FormData) => {
+    login({
+      email: values.email,
+      password: values.password,
+      remember: shouldRemember,
+      setErrors,
+      setStatus,
+    });
+  };
+
+  const onSubmitSignup = async (values: FormData) => {
+    register({
+      name: values.name,
+      email: values.email,
+      password: values.password,
+      password_confirmation: values.passwordConfirmation,
+      setErrors,
+    });
+  };
+
+  const onSubmitForgotPassword = async (values: FormData) => {
+    forgotPassword({
+      email: values.email,
+      setErrors,
+      setStatus,
+    });
+  };
 
   const handleButtonClick = (button: string) => {
     setActiveButton(button);
@@ -112,10 +128,6 @@ export default function FormModel() {
       passwordConfirmation: "",
       email: "",
     });
-
-    if (button === "signup") {
-      setShowResetMessage(false);
-    }
   };
 
   const providers = [
@@ -148,7 +160,13 @@ export default function FormModel() {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={
+          activeButton === "login"
+            ? form.handleSubmit(onSubmitLogin)
+            : activeButton === "signup"
+            ? form.handleSubmit(onSubmitSignup)
+            : form.handleSubmit(onSubmitForgotPassword)
+        }
         className="space-y-2 w-[272px]"
       >
         <h2 className="text-center text-xl text-[#DF0000] font-bold mb-4">
@@ -199,11 +217,13 @@ export default function FormModel() {
           <p>
             <b>Or</b>
           </p>
-          {activeButton === "login" ? (
-            <p>Log in with your email</p>
-          ) : (
-            <p>Sign up with your email</p>
-          )}
+          <div className="text-center space-y-2">
+            {activeButton === "login" && <p>Log in with your email</p>}
+            {activeButton === "signup" && <p>Sign up with your email</p>}
+            {activeButton === "forgotPassword" && (
+              <p>Provide your email to reset password</p>
+            )}
+          </div>
         </div>
         {activeButton === "signup" && (
           <FormField
@@ -233,19 +253,22 @@ export default function FormModel() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="password..." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {activeButton !== "forgotPassword" && (
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="password..." {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
         {activeButton === "signup" && (
           <FormField
             control={form.control}
@@ -291,49 +314,13 @@ export default function FormModel() {
           >
             Submit
           </Button>
-          {showResetMessage && (
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button
-                  variant="link"
-                  type="button"
-                  size="sm"
-                  aria-label="Reset password button"
-                >
-                  Reset password?
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Reset your password</DialogTitle>
-                  <DialogDescription>
-                    Type in your email and we will send you a link to reset your
-                    password.
-                  </DialogDescription>
-                </DialogHeader>
-                <form>
-                  <div className="space-y-4">
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input placeholder="email..." {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <Button type="submit" aria-label="Submit form button">
-                      Submit
-                    </Button>
-                  </div>
-                </form>
-              </DialogContent>
-            </Dialog>
-          )}
+          <Button
+            variant="link"
+            type="button"
+            onClick={() => setActiveButton("forgotPassword")}
+          >
+            Reset Password?
+          </Button>
         </div>
       </form>
     </Form>

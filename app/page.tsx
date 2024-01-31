@@ -4,9 +4,7 @@ import Form from "./_components/form/Form";
 import Carousel from "./_components/Carousel";
 import Footer from "./_components/Footer";
 
-
 export default function Home() {
-
   return (
     <main className="bg-white">
       <header className="flex md:mx-4 md:justify-between justify-center">

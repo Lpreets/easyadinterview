@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/auth";
 import { ArrowUp } from "lucide-react";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import React from "react";
 
 const navlinks = [
@@ -43,7 +44,9 @@ const navlinks = [
 
 const Dashboard = () => {
 
-  const { logout } = useAuth()
+  const { logout, user } = useAuth()
+
+  if (!user) redirect('/')
 
   const handleClick = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
