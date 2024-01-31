@@ -15,6 +15,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+
 import { Input } from "@/components/ui/input";
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 import Link from "next/link";
@@ -22,18 +31,24 @@ import { useRouter } from "next/navigation";
 import { useAuth } from '@/hooks/auth'
 
 const formSchema = z.object({
+  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({
     message: "Email must be a proper email address.",
   }),
   password: z.string().min(6, {
     message: "Password must be at least 6 characters.",
   }),
+  passwordConfirmation: z.string().min(6, {
+    message: "Password must be at least 6 characters.",
+  }),
+  remember: z.boolean().optional(),
 });
 
 export default function FormModel() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       password: "",
       email: "",
     },
@@ -41,8 +56,12 @@ export default function FormModel() {
   });
   
   const router = useRouter();
+
   const [showResetMessage, setShowResetMessage] = useState(false);
   const [activeButton, setActiveButton] = useState<string>("login");
+  const [errors, setErrors] = useState([])
+  const [shouldRemember, setShouldRemember] = useState(false)
+  const [status, setStatus] = useState(null)
 
   const { login } = useAuth({
     middleware: 'guest',
@@ -58,15 +77,22 @@ const { register } = useAuth({
     setShowResetMessage(false);
     
     if (activeButton === "login") {
-      login({
-        email: values.email,
-        password: values.password,
-    })
+       login({
+            email: values.email,
+            password: values.password,
+            remember: shouldRemember,
+            setErrors,
+            setStatus,
+        })
     
     } else if (activeButton === "signup") {
+
       register({
         email: values.email,
         password: values.password,
+        remember: shouldRemember,
+        setErrors,
+        setStatus,
     })
       
     }
@@ -154,6 +180,21 @@ const { register } = useAuth({
             <p>Sign up with your email</p>
           )}
           </div>
+          {activeButton === 'signup' && (
+          <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="name..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+          )}
           <FormField
           control={form.control}
           name="email"
@@ -180,14 +221,83 @@ const { register } = useAuth({
             </FormItem>
           )}
         />
+        {activeButton === 'signup' && (
+          <FormField
+          control={form.control}
+          name="passwordConfirmation"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm Password</FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="confirm..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+          )}
+          {activeButton === 'login' && (
+<FormField
+  control={form.control}
+  name="remember"
+  render={({ field }) => (
+    <FormItem>
+      <FormControl>
+        <label className="flex items-center">
+          <input
+            type="checkbox"
+            className="form-checkbox"
+            checked={field.value}
+            onChange={field.onChange}
+          />
+          <span className="ml-2">Remember me</span>
+        </label>
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
+          )}
         <div className="flex flex-row">
          <Button type="submit" className="mr-16" aria-label="Submit form button">Submit</Button>
           {showResetMessage && (
-          <Button variant="link" type="button" size="sm" aria-label="Reset password button" >Reset password?</Button>
+             <Dialog>
+             <DialogTrigger asChild>
+              <Button variant="link" type="button" size="sm" aria-label="Reset password button">Reset password?</Button>
+             </DialogTrigger>
+             <DialogContent className="sm:max-w-[425px]">
+               <DialogHeader>
+                 <DialogTitle>Reset your password</DialogTitle>
+                 <DialogDescription>
+                   Type in your email and we will send you a link to reset your password.
+                 </DialogDescription>
+               </DialogHeader>
+                <form>
+                  <div className="space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input placeholder="email..." {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button type="submit" aria-label="Submit form button">Submit</Button>
+                  </div>
+                  </form>
+             </DialogContent>
+           </Dialog>
+         
       )}
       </div>
       </form>
     </Form>
+
   );
 }
 
