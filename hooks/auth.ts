@@ -12,7 +12,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: UseAuthProps = 
     const router = useRouter()
     const params = useParams()
 
-    const { data: user, error, mutate } = useSWR('/api/user', () =>
+    const { data: user, error, mutate } = useSWR('http://localhost:8000/api/user', () =>
         axios
             .get('/api/user')
             .then(res => res.data)
