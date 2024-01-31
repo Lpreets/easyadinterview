@@ -43,20 +43,20 @@ export default function FormModel() {
   const [showResetMessage, setShowResetMessage] = useState(false);
   const [activeButton, setActiveButton] = useState<string>("login");
 
-  useEffect(() => {
-    const fetchCSRFToken = async () => {
-      const response = await fetch('http://localhost:8000/sanctum/csrf-cookie', {
-        credentials: 'include',
-      });
-      if (response.ok) {
-        console.log('CSRF token retrieved');
-      } else {
-        console.error('Failed to retrieve CSRF token');
-      }
-    };
+  // useEffect(() => {
+  //   const fetchCSRFToken = async () => {
+  //     const response = await fetch('http://localhost:8000/sanctum/csrf-cookie', {
+  //       credentials: 'include',
+  //     });
+  //     if (response.ok) {
+  //       console.log('CSRF token retrieved');
+  //     } else {
+  //       console.error('Failed to retrieve CSRF token');
+  //     }
+  //   };
   
-    fetchCSRFToken();
-  }, []);
+  //   fetchCSRFToken();
+  // }, []);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setShowResetMessage(false);
