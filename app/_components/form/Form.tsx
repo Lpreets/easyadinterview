@@ -47,7 +47,7 @@ export default function FormModel() {
     setShowResetMessage(false);
     
     if (activeButton === "login") {
-      const response = await fetch('http://localhost:8000/api/login', {
+      const response = await fetch('http://localhost:8000/web/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ export default function FormModel() {
       }
     
     } else if (activeButton === "signup") {
-      const response = await fetch('http://localhost:8000/api/signup', {
+      const response = await fetch('http://localhost:8000/web/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
