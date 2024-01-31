@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuth } from '@/hooks/auth'
 
 const formSchema = z.object({
   email: z.string().email({
@@ -43,45 +44,31 @@ export default function FormModel() {
   const [showResetMessage, setShowResetMessage] = useState(false);
   const [activeButton, setActiveButton] = useState<string>("login");
 
+  const { login } = useAuth({
+    middleware: 'guest',
+    redirectIfAuthenticated: '/dashboard',
+})
+
+const { register } = useAuth({
+  middleware: 'guest',
+  redirectIfAuthenticated: '/dashboard',
+})
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setShowResetMessage(false);
     
     if (activeButton === "login") {
-      const response = await fetch('http://localhost:8000/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-        credentials: 'include',
-      });
-      
-      if (response.ok) {
-        router.push("/dashboard");
-      } else {
-        const error = await response.text();
-        console.log(error);
-      }
+      login({
+        email: values.email,
+        password: values.password,
+    })
     
     } else if (activeButton === "signup") {
-
-      const response = await fetch('http://localhost:8000/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-        credentials: 'include',
-      });
-  
-      console.log(response)
-  
-      if (response.ok) {
-        setActiveButton("login");
-      } else {
-        const error = await response.text();
-        console.log(error);
-      }
+      register({
+        email: values.email,
+        password: values.password,
+    })
+      
     }
   };
 
