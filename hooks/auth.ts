@@ -11,6 +11,8 @@ interface UseAuthProps {
 export const useAuth = ({ middleware, redirectIfAuthenticated }: UseAuthProps = {}) => {
     const router = useRouter()
     const params = useParams()
+    
+    const csrf = () => axios.get('/sanctum/csrf-cookie')
 
     const { data: user, error, mutate } = useSWR('/api/user', () =>
         axios
@@ -22,8 +24,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: UseAuthProps = 
                 router.push('/verify-email')
             }),
     )
-
-    const csrf = () => axios.get('/sanctum/csrf-cookie')
 
     const register = async ({ setErrors, ...props }: { setErrors: any, [key: string]: any }) => {
       await csrf()
