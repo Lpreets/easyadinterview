@@ -72,23 +72,26 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: UseAuthProps = 
         })
     }
 
-    const resetPassword = async ({ setErrors, setStatus, ...props }: { setErrors: any, setStatus: any, [key: string]: any }) => {
-        await csrf()
+    const resetPassword = async ({ setErrors, setStatus, token, ...props }: { setErrors: any, setStatus: any, token: string, [key: string]: any }) => {
+      await csrf()
+  
+      setErrors([])
+      setStatus(null)
+  
+      axios
+          .post('/reset-password', { token, ...props })
+          .then(response => { 
+              router.push('/' + btoa(response.data.status));
+              router.push("/")
+    })
+          .catch(error => {
+              if (error.response.status !== 422) throw error
+  
+              setErrors(error.response.data.errors)
+          })
 
-        setErrors([])
-        setStatus(null)
-
-        axios
-            .post('/reset-password', { token: params.token, ...props })
-            .then(response =>
-                router.push('/login?reset=' + btoa(response.data.status)),
-            )
-            .catch(error => {
-                if (error.response.status !== 422) throw error
-
-                setErrors(error.response.data.errors)
-            })
-    }
+         
+  }
 
     const resendEmailVerification = ({ setStatus }: { setStatus: any }) => {
       axios

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -27,11 +27,11 @@ const formSchemaSignup = z.object({
   email: z.string().email({
     message: "Email must be a proper email address.",
   }),
-  password: z.string().min(6, {
-    message: "Password must be at least 6 characters.",
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters.",
   }),
-  passwordConfirmation: z.string().min(6, {
-    message: "Password must be at least 6 characters.",
+  passwordConfirmation: z.string().min(8, {
+    message: "Password must be at least 8 characters.",
   }),
 });
 
@@ -39,8 +39,8 @@ const formSchemaLogin = z.object({
   email: z.string().email({
     message: "Email must be a proper email address.",
   }),
-  password: z.string().min(6, {
-    message: "Password must be at least 6 characters.",
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters.",
   }),
   remember: z.boolean().optional(),
 });
